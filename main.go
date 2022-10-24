@@ -13,53 +13,58 @@ func main() {
 	file := "1.txt"
 	input, _ := os.ReadFile(fmt.Sprintf("./inputs/%s", file))
 
-	_ = parseInput(string(input))
+	board := parseInput(string(input))
 
-	//
-	//display(board)
-	//fmt.Println("Solving...")
-	//if solve(&board) {
-	//	display(board)
-	//}
+	display(board)
+	fmt.Println()
+
+	fmt.Println("Solving...")
+	if solve(&board) {
+		display(board)
+
+		file, err := os.Create(fmt.Sprintf("./outputs/%s", file))
+		if err != nil {
+			log.Println(err)
+		}
+
+		for _, slice := range board {
+			s := ""
+			for _, v := range slice {
+				s = s + fmt.Sprintf("%v, ", v)
+			}
+			_, err = file.WriteString(fmt.Sprintf("%v\n", s))
+			if err != nil {
+				log.Println(err)
+			}
+		}
+	}
 }
 
 // parseInput converts a string to 2D slice.
 func parseInput(input string) [][]int {
 	board := [][]int{
-		{3, 0, 6, 5, 0, 8, 4, 0, 0},
-		{5, 2, 0, 0, 0, 0, 0, 0, 0},
-		{0, 8, 7, 0, 0, 0, 0, 3, 1},
-		{0, 0, 3, 0, 1, 0, 0, 8, 0},
-		{9, 0, 0, 8, 6, 3, 0, 0, 5},
-		{0, 5, 0, 0, 9, 0, 6, 0, 0},
-		{1, 3, 0, 0, 0, 0, 2, 5, 0},
-		{0, 0, 0, 0, 0, 0, 0, 7, 4},
-		{0, 0, 5, 2, 0, 6, 3, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0},
 	} // dummy board
 
 	scanner := bufio.NewScanner(strings.NewReader(input))
-	//scanner.Split(bufio.s)
-	
-	var str string
-
-	for _, n := range string(input) {
-
-	}
+	scanner.Split(bufio.ScanRunes)
 
 	for row := 0; row < 9; row++ {
 		for col := 0; col < 9; col++ {
 			scanner.Scan()
-			if err := scanner.Err(); err != nil {
-				break
-			}
-
-			s := strings.Replace(scanner.Text(), " ", "", -1)
-			s = strings.Replace(s, ",", "", -1)
-			num, err := strconv.Atoi(s)
+			val, err := strconv.Atoi(scanner.Text())
 			if err != nil {
-
+				log.Println(err)
 			}
-			log.Printf("%v, ", s)
+			board[row][col] = val
 		}
 	}
 
@@ -162,7 +167,6 @@ func isSafe(board *[][]int, row int, col int, num int) bool {
 
 // display prints sudoku board on console.
 func display(board [][]int) {
-	fmt.Println("")
 	for _, slice := range board {
 		for _, val := range slice {
 			fmt.Printf("%d, ", val)
