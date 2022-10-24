@@ -10,17 +10,18 @@ import (
 )
 
 func main() {
-	file := "1.txt"
+
+	file := "pattern-1.txt"
 	input, _ := os.ReadFile(fmt.Sprintf("./inputs/%s", file))
 
 	board := parseInput(string(input))
 
-	display(board)
-	fmt.Println()
+	//display(board)
+	//fmt.Println()
 
 	fmt.Println("Solving...")
 	if solve(&board) {
-		display(board)
+		//display(board)
 
 		file, err := os.Create(fmt.Sprintf("./outputs/%s", file))
 		if err != nil {
@@ -38,6 +39,8 @@ func main() {
 			}
 		}
 	}
+
+	fmt.Println(fmt.Sprintf("Result is saved in \"./outouts/%v\"", file))
 }
 
 // parseInput converts a string to 2D slice.
@@ -60,9 +63,10 @@ func parseInput(input string) [][]int {
 	for row := 0; row < 9; row++ {
 		for col := 0; col < 9; col++ {
 			scanner.Scan()
-			val, err := strconv.Atoi(scanner.Text())
+			tmp := scanner.Text()
+			val, err := strconv.Atoi(tmp)
 			if err != nil {
-				log.Println(err)
+				// error here
 			}
 			board[row][col] = val
 		}
