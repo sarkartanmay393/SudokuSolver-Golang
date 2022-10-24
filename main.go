@@ -11,15 +11,28 @@ import (
 
 func main() {
 
-	file := "pattern-1.txt"
-	input, _ := os.ReadFile(fmt.Sprintf("./inputs/%s", file))
+	fmt.Printf("Enter the name of your file containing the Sudoku Pattern :		")
+
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	var file string
+	file = scanner.Text()
+	if !strings.Contains(file, ".text") {
+		file = "pattern-1.text"
+	}
+
+	input, err := os.ReadFile(fmt.Sprintf("./inputs/%s", file))
+	if err != nil {
+		log.Println(err)
+	}
 
 	board := parseInput(string(input))
 
-	//display(board)
-	//fmt.Println()
+	fmt.Println("Defined Sudoku Pattern")
+	display(board)
+	fmt.Println()
 
-	fmt.Println("Solving...")
+	fmt.Println("Engine starts solving the pattern...")
 	if solve(&board) {
 		//display(board)
 
